@@ -18,8 +18,8 @@ export default class Footer extends Component {
             <Text>Completed</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={this.props.onClearComplete}>
-          <Text>Clear Completed</Text>
+        <TouchableOpacity style={styles.clearComplete} onPress={this.props.onClearComplete}>
+          <Text style={{ color: "red" }}>Clear Completed</Text>
         </TouchableOpacity>
       </View>
     )
@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
     padding: 16,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    flexWrap: "wrap",
+    justifyContent: "space-around"
   },
   filters: {
     flexDirection: "row"
@@ -43,6 +44,14 @@ const styles = StyleSheet.create({
     borderColor: "transparent"
   },
   selected: {
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     borderColor: "rgba(175, 47, 47, 0.2)"
+  },
+  clearComplete: {
+    borderColor: "red",
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 8,
+    marginVertical: 3
   }
 })
