@@ -18,6 +18,9 @@ export default class Footer extends Component {
             <Text>Completed</Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity onPress={this.props.onClearComplete}>
+          <Text>Clear Completed</Text>
+        </TouchableOpacity>
       </View>
     )
   }

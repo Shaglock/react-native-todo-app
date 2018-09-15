@@ -30,6 +30,7 @@ export default class App extends React.Component {
     this.handleRemoveItem = this.handleRemoveItem.bind(this)
     this.handleToggleAllComplete = this.handleToggleAllComplete.bind(this)
     this.handleToggleComplete = this.handleToggleComplete.bind(this)
+    this.handleClearComplete = this.handleClearComplete.bind(this)
   }
 
   setSource(items, itemsDatasource, otherState = {}) {
@@ -38,6 +39,10 @@ export default class App extends React.Component {
       dataSource: this.state.dataSource.cloneWithRows(itemsDatasource),
       ...otherState
     })
+  }
+  handleClearComplete() {
+    const newItems = filterItems("ACTIVE", this.state.items)
+    this.setSource(newItems, filterItems(this.state.filter, newItems))
   }
   handleFilter(filter) {
     this.setSource(this.state.items, filterItems(filter, this.state.items), { filter })
@@ -111,6 +116,7 @@ export default class App extends React.Component {
             }} />
         </View>
         <Footer
+          onClearComplete={this.handleClearComplete}
           count={filterItems("ACTIVE", this.state.items).length}
           onFilter={this.handleFilter}
           filter={this.state.filter}
