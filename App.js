@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Platform, ListView } from 'react-native';
+import { StyleSheet, View, Platform, ListView, AsyncStorage } from 'react-native';
 import Header from "./components/Header";
 import Footer from "./components/Footer"
 import Row from "./components/Row";
@@ -33,17 +33,31 @@ export default class App extends React.Component {
     this.handleClearComplete = this.handleClearComplete.bind(this)
   }
 
+  componentWillMount() {
+    AsyncStorage.getItem("items").then((json) => {
+      try {
+        const items = JSON.parse(json);
+        this.setSource(items, items)
+      } catch (error) {
+
+      }
+    })
+  }
+
   setSource(items, itemsDatasource, otherState = {}) {
     this.setState({
       items,
       dataSource: this.state.dataSource.cloneWithRows(itemsDatasource),
       ...otherState
     })
+    AsyncStorage.setItem("items", JSON.stringify(items));
   }
+
   handleClearComplete() {
     const newItems = filterItems("ACTIVE", this.state.items)
     this.setSource(newItems, filterItems(this.state.filter, newItems))
   }
+
   handleFilter(filter) {
     this.setSource(this.state.items, filterItems(filter, this.state.items), { filter })
   }
@@ -54,6 +68,7 @@ export default class App extends React.Component {
     });
     this.setSource(newItems, newItems)
   }
+
   handleAddItem() {
     if (!this.state.value) return;
     const newItems = [
@@ -86,6 +101,7 @@ export default class App extends React.Component {
     })
     this.setSource(newItems, newItems);
   }
+
   render() {
     return (
       <View style={styles.container}>
