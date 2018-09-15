@@ -4,11 +4,20 @@ import Header from "./components/Header";
 import Footer from "./components/Footer"
 import Row from "./components/Row";
 
+const filterItems = (filter, items) => {
+  return items.filter((item) => {
+    if (filter === "ALL") return true;
+    if (filter === "COMPLETED") return item.complete;
+    if (filter === "ACTIVE") return !item.complete;
+  })
+}
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
+      filter: "ALL",
       allComplete: false,
       value: "",
       items: [],
@@ -16,6 +25,7 @@ export default class App extends React.Component {
     }
 
     this.setSource = this.setSource.bind(this)
+    this.handleFilter = this.handleFilter.bind(this)
     this.handleAddItem = this.handleAddItem.bind(this)
     this.handleRemoveItem = this.handleRemoveItem.bind(this)
     this.handleToggleAllComplete = this.handleToggleAllComplete.bind(this)
@@ -29,6 +39,10 @@ export default class App extends React.Component {
       ...otherState
     })
   }
+  handleFilter(filter) {
+    this.setSource(this.state.items, filterItems(filter, this.state.items), { filter })
+  }
+
   handleRemoveItem(key) {
     const newItems = this.state.items.filter((item) => {
       return item.key !== key;
@@ -96,7 +110,10 @@ export default class App extends React.Component {
               return <View key={rowId} style={styles.separator} />
             }} />
         </View>
-        <Footer />
+        <Footer
+          onFilter={this.handleFilter}
+          filter={this.state.filter}
+        />
       </View>
     );
   }
