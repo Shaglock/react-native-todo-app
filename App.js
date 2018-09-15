@@ -17,6 +17,7 @@ export default class App extends React.Component {
 
     this.setSource = this.setSource.bind(this)
     this.handleAddItem = this.handleAddItem.bind(this)
+    this.handleRemoveItem = this.handleRemoveItem.bind(this)
     this.handleToggleAllComplete = this.handleToggleAllComplete.bind(this)
     this.handleToggleComplete = this.handleToggleComplete.bind(this)
   }
@@ -28,7 +29,12 @@ export default class App extends React.Component {
       ...otherState
     })
   }
-
+  handleRemoveItem(key) {
+    const newItems = this.state.items.filter((item) => {
+      return item.key !== key;
+    });
+    this.setSource(newItems, newItems)
+  }
   handleAddItem() {
     if (!this.state.value) return;
     const newItems = [
@@ -81,6 +87,7 @@ export default class App extends React.Component {
                 <Row
                   key={key}
                   onComplete={(complete) => this.handleToggleComplete(key, complete)}
+                  onRemove={() => this.handleRemoveItem(key)}
                   {...value}
                 />
               )
